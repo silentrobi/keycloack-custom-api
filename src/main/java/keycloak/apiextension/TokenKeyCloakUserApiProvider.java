@@ -6,19 +6,25 @@ import org.keycloak.models.UserModel;
 import org.keycloak.services.resource.RealmResourceProvider;
 import org.keycloak.utils.MediaType;
 
+import keycloak.apiextension.mappers.UserMapper;
+import keycloak.apiextension.models.UserDto;
+
 import javax.ws.rs.*;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class TokenKeyCloakUserApiProvider implements RealmResourceProvider {
     private final KeycloakSession session;
     private final String defaultAttr = "marchent_id";
-
+    private final UserMapper userMapper;
     public TokenKeyCloakUserApiProvider(KeycloakSession session) {
         this.session = session;
+        this.userMapper = new UserMapper();
     }
 
-    public void close() {}
+    public void close() {
+    }
 
     public Object getResource() {
         return this;
@@ -27,13 +33,11 @@ public class TokenKeyCloakUserApiProvider implements RealmResourceProvider {
     @GET
     @Path("users/search-by-attr")
     @NoCache
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON })
     @Encoded
-    public List<UserModel> searchUsersByAttribute(@DefaultValue(defaultAttr) @QueryParam("attr") String attr,
-                                                  @QueryParam("value") String value) {
-        return session
-                .users()
-                .searchForUserByUserAttributeStream(attr, value, session.getContext().getRealm())
-                .collect(Collectors.toList());
+    public List<UserDto> searchUsersByAttribute(@DefaultValue(defaultAttr) @QueryParam("attr") String attr,
+            @QueryParam("value") String value) {
+        return session.users().searchForUserByUserAttribute(attr, value, session.getContext().getRealm())
+                .stream().map(e -> userMapper.mapToUserDto(e)).collect(Collectors.toList());
     }
 }
