@@ -1,22 +1,22 @@
 package keycloak.apiextension.models;
 
-import java.util.List;
-
 public class UserDto {
     private String userName;
     private String firstName;
     private String lastName;
     private String id;
     private String email;
-    
-    public UserDto(String userName, String firstName, String lastName, String id, String email) {
+    private String marchentId;
+
+    public UserDto(String userName, String firstName, String lastName, String id, String email, String marchentId) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
         this.email = email;
+        this.marchentId = marchentId;
     }
-
+    
     public String getUserName() {
         return userName;
     }
@@ -53,5 +53,13 @@ public class UserDto {
     
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getMarchentId() {
+        return marchentId;
+    }
+
+    public void setMarchentId(String marchentId) {
+        this.marchentId = marchentId;
     }
 }

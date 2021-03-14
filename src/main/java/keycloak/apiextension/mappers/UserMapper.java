@@ -12,7 +12,8 @@ public class UserMapper {
             um.getFirstName(),
             um.getLastName(),
             um.getId(),
-            um.getEmail()
+            um.getEmail(),
+            um.getAttribute("marchent_id").get(0)
             );
 
     }
